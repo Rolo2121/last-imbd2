@@ -1,6 +1,7 @@
 import React from "react";
 import "antd/dist/antd.css";
 import "./index.css";
+import "./Login.js"
 import {
   PageHeader,
   Breadcrumb,
@@ -15,7 +16,9 @@ import {
   Space,
   Card
 } from "antd";
-
+import {
+    UserOutlined
+} from "@ant-design/icons"
 const { Header, Content, Footer } = Layout;
 const temp = [1, 2, 3, 4];
 const App = () => {
@@ -25,18 +28,14 @@ const App = () => {
     <Layout className="layout">
       <Header>
         <div className="logo">last-imdb</div>
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["2"]}
-          items={new Array(3).fill(null).map((_, index) => {
-            const key = index + 1;
-            return {
-              key,
-              label: `nav ${key}`,
-            };
-          })}
-        />
+        <Menu mode="horizontal" theme="dark" defaultSelectedKeys={['UserOutlined']} style= {{float: 'right'}}>
+    <Menu.Item key="UserOutlined" icon={<UserOutlined />}>
+    </Menu.Item>
+  </Menu>
+    
+
+      
+
       </Header>
       <Content
         style={{
