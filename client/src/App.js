@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import Layout from './pages/Layout';
 import Login from './pages/Login'
+import Watchlist from './pages/WatchList'
 import{Routes, Route, BrowserRouter} from 'react-router-dom'
 import Movie from './pages/Movie'
 function App() {
@@ -11,6 +12,7 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/' element={ <Layout/> }/>
         <Route path='/movie/:id' element={ <Movie/> }/>
+        <Route path='/watchlist' element={ <Watchlist/> }/>
       </Routes>
 
     </div>

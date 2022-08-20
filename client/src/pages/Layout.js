@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "antd/dist/antd.css";
 import "../index.css";
 import "./Login.js"
+import Nav from "./Nav"
+import { useNavigate } from "react-router-dom";
 import {
   PageHeader,
   Breadcrumb,
@@ -23,10 +25,20 @@ import {
 import MovieCard from "../MovieCard";
 
 const { Header, Content, Footer } = Layout;
+
 const AppLayout = () => {
+
+  const navigate = useNavigate()
+  const onFinish = (values) => 
+  {navigate(`/movie/${values.movieName}`)}
+  const onFinishFailed = (errorInfo) => {
+  console.log(errorInfo);
+}
   const [form] = Form.useForm();
   const onFormLayoutChange = (fdata) => {};
   const [movies, setMovies] = useState([]);
+
+
   useEffect(() => {
 
     const getMovies = async () => {
@@ -39,26 +51,19 @@ const AppLayout = () => {
   }, []);
   return (
     <Layout className="layout">
-      <Header>
-        <div className="logo">last-imdb</div>
-        <Menu mode="horizontal" theme="dark" defaultSelectedKeys={['UserOutlined']} style= {{float: 'right'}}>
-    <Menu.Item key="UserOutlined" icon={<UserOutlined />}>
-    </Menu.Item>
-  </Menu>
-    
-      </Header>
+     <Nav />
       <Content
         style={{
           padding: "0 50px",
         }}
       >
         <div className="site-layout-content">
-          <Form layout="vertical" form={form} onValuesChange={onFormLayoutChange} className="margin-top-2">
-            <Form.Item label="Enter Movie Name:">
+          <Form layout="vertical" form={form} onValuesChange={onFormLayoutChange} className="margin-top-2" onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete="off" >
+            <Form.Item label="Enter Movie Name:" name="movieName">
               <Input  placeholder="Find a Movie" />
             </Form.Item>
             <Form.Item>
-              <Button type="primary">Submit</Button>
+              <Button type="primary" htmlType="submit">Submit</Button>
             </Form.Item>
           </Form>
 
