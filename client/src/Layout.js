@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "antd/dist/antd.css";
 import "./index.css";
 import "./Login.js"
@@ -19,11 +19,24 @@ import {
 import {
     UserOutlined
 } from "@ant-design/icons"
+
+import MovieCard from "./MovieCard";
+
 const { Header, Content, Footer } = Layout;
-const temp = [1, 2, 3, 4];
-const App = () => {
+const AppLayout = () => {
   const [form] = Form.useForm();
   const onFormLayoutChange = (fdata) => {};
+  const [movies, setMovies] = useState([]);
+  useEffect(() => {
+
+    const getMovies = async () => {
+      const response = await fetch("/api/movie");
+      console.log(response);
+      const data = await response.json();
+      setMovies(data);
+    };
+    getMovies();
+  }, []);
   return (
     <Layout className="layout">
       <Header>
@@ -33,9 +46,6 @@ const App = () => {
     </Menu.Item>
   </Menu>
     
-
-      
-
       </Header>
       <Content
         style={{
@@ -43,12 +53,7 @@ const App = () => {
         }}
       >
         <div className="site-layout-content">
-          <Form
-            layout="vertical"
-            form={form}
-            onValuesChange={onFormLayoutChange}
-            className="margin-top-2"
-          >
+          <Form layout="vertical" form={form} onValuesChange={onFormLayoutChange} className="margin-top-2">
             <Form.Item label="Enter Movie Name:">
               <Input placeholder="Find a Movie" />
             </Form.Item>
@@ -58,27 +63,12 @@ const App = () => {
           </Form>
 
           <Row gutter={[16, 16]}>
-            {temp.map((t, i) => (
-              <Col xs={24} sm={12} md={8} lg={6} xlg={4}>
-                <Card
-                  hoverable
-                  style={{
-                    width: '100%',
-                  }}
-                  cover={
-                    <img
-                      alt="example"
-                      src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-                    />
-                  }
-                >
-                  <Card.Meta
-                    title="Europe Street beat"
-
-                  />
-                </Card>
-              </Col>
-            ))}
+            {movies
+              .map((movie) => (
+                <Col xs={24} sm={12} md={8} lg={6} xlg={4}>
+                  <MovieCard movie={movie} />
+                </Col>
+              ))}
           </Row>
         </div>
       </Content>
@@ -93,4 +83,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default AppLayout;
