@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import Nav from './Nav'
+import "../index.css";
 import {
   Form,
   Input,
@@ -19,16 +20,22 @@ const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 const App = () => {
-  const [componentDisabled, setComponentDisabled] = useState(true);
-
-  const onFormLayoutChange = ({ disabled }) => {
-    setComponentDisabled(disabled);
+  const [form] = Form.useForm();
+  const [fileList, setFileList] = useState([])
+  const [componentDisabled, setComponentDisabled] = useState(false);
+  const onFinish = (values) => {
+    console.log(values);
   };
+  const onFormLayoutChange = ({ disabled }) => {
+   /* setComponentDisabled(disabled);
+  };*/}
 
   return (
     <>
 <Nav></Nav>
       <Form
+      form={form}
+      onFinish={onFinish}
         labelCol={{
           span: 4,
         }}
@@ -40,16 +47,27 @@ const App = () => {
         disabled={componentDisabled}
       >
 
-        <Form.Item label="Username">
+
+        <Form.Item label="Email" name="email">
           <Input />
         </Form.Item>
-        <Form.Item label="Password">
+        <Form.Item label="Username"name="username">
+          <Input />
+        </Form.Item>
+        <Form.Item label="Password" name="password">
           <Input />
         </Form.Item>
 
 
         <Form.Item label="Profile Pic" valuePropName="fileList">
-          <Upload action="/upload.do" listType="picture-card">
+          <Upload fileList={fileList}
+          onChange={({fileList:fl})=>{
+            setFileList(fl)
+          }}
+          beforeUpload={()=>{
+            return false
+          }}
+          action="/upload.do" listType="picture-card">
             <div>
               <PlusOutlined />
               <div
@@ -63,7 +81,7 @@ const App = () => {
           </Upload>
         </Form.Item>
         <Form.Item label="Submit">
-          <Button>Submit</Button>
+          <Button htmlType="submit">Submit</Button>
         </Form.Item>
       </Form>
     </>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "antd/dist/antd.css";
-import "./index.css";
+import "../index.css";
 import "./Login.js"
 import {
   PageHeader,
@@ -20,7 +20,7 @@ import {
     UserOutlined
 } from "@ant-design/icons"
 
-import MovieCard from "./MovieCard";
+import MovieCard from "../MovieCard";
 
 const { Header, Content, Footer } = Layout;
 const AppLayout = () => {
@@ -55,7 +55,7 @@ const AppLayout = () => {
         <div className="site-layout-content">
           <Form layout="vertical" form={form} onValuesChange={onFormLayoutChange} className="margin-top-2">
             <Form.Item label="Enter Movie Name:">
-              <Input placeholder="Find a Movie" />
+              <Input  placeholder="Find a Movie" />
             </Form.Item>
             <Form.Item>
               <Button type="primary">Submit</Button>

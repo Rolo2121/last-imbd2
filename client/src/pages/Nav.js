@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "antd/dist/antd.css";
-import "./index.css";
+import "../index.css";
 import "./Login.js"
 import {
   PageHeader,
@@ -20,8 +20,11 @@ import {
     UserOutlined
 } from "@ant-design/icons"
 
+
+
 const { Header, Content, Footer } = Layout;
 const NavLayout = () => {
+
 return(
       <Header>
       <div className="logo">last-imdb</div>
