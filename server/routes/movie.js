@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Movie } = require("../models/Movie");
+const Movie = require("../models/Movie");
 //const { auth } = require("../middleware/auth");
 var sanitize = require("mongo-sanitize");
 
@@ -15,9 +15,10 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  console.log(123)
   const movies = await Movie.find({});
   res.json(movies);
 });
+
+router.get("/search/:movie_name", async (req, res) => {});
 
 module.exports = router;

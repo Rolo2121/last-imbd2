@@ -24,4 +24,4 @@ const schema = mongoose.Schema(
 
 const Movie = mongoose.model("Movie", schema);
 
-module.exports = { Movie };
+module.exports = Movie;

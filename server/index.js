@@ -5,8 +5,9 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const config = require("./config/key");
-
 const mongoose = require("mongoose");
+const session = require("express-session");
+
 const connect = mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected..."))
@@ -14,9 +15,16 @@ const connect = mongoose
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 app.use(cookieParser());
 
-//app.use("/api/users", require("./routes/users"));
+app.use("/api/user", require("./routes/users"));
 // app.use("/api/comment", require("./routes/comment"));
 // app.use("/api/like", require("./routes/like"));
 // app.use("/api/favorite", require("./routes/favorite"));
