@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import Layout from './pages/Layout';
 import Login from './pages/Login'
