@@ -15,6 +15,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
+  console.log(123)
   const movies = await Movie.find({});
   res.json(movies);
 });
