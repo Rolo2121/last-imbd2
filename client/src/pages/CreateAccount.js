@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import Nav from './Nav'
 import "../index.css";
-
 import {
-
   Form,
   Input,
   Button,
@@ -50,7 +48,9 @@ const App = () => {
       >
 
 
-
+        <Form.Item label="Email" name="email">
+          <Input />
+        </Form.Item>
         <Form.Item label="Username"name="username">
           <Input />
         </Form.Item>
@@ -59,9 +59,29 @@ const App = () => {
         </Form.Item>
 
 
-
-        <Form.Item label="Login">
-          <Button htmlType="submit">Login</Button>
+        <Form.Item label="Profile Pic" valuePropName="fileList">
+          <Upload fileList={fileList}
+          onChange={({fileList:fl})=>{
+            setFileList(fl)
+          }}
+          beforeUpload={()=>{
+            return false
+          }}
+          action="/upload.do" listType="picture-card">
+            <div>
+              <PlusOutlined />
+              <div
+                style={{
+                  marginTop: 8,
+                }}
+              >
+                Upload
+              </div>
+            </div>
+          </Upload>
+        </Form.Item>
+        <Form.Item label="Submit">
+          <Button htmlType="submit">Submit</Button>
         </Form.Item>
       </Form>
     </>
