@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "antd/dist/antd.css";
 import "../index.css";
-import "./Login.js"
+import "./CreateAccount.js"
 import { useNavigate } from "react-router-dom";
 import {
   PageHeader,
@@ -35,6 +35,7 @@ return(
       <Button onClick={() => {
         navigate("/watchlist")
       }}>Watchlist</Button>
+  
       <Menu mode="horizontal" theme="dark" defaultSelectedKeys={['UserOutlined']} style= {{float: 'right'}}>
 
   <Menu.Item key="UserOutlined" onClick={() => {
