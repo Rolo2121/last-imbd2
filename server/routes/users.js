@@ -7,6 +7,10 @@ var sanitize = require("mongo-sanitize");
 
 router.post("/signup", async function (req, res) {
   try {
+    const existingUser = await User.findOne({ email: req.body.email });
+    if (existingUser) {
+      return res.sendStatus(400);
+    }
     var user = await User.create(sanitize(req.body));
     req.session.userId = user._id;
     res.sendStatus(200);
