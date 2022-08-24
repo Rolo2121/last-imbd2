@@ -1,34 +1,45 @@
-const express = require('express');
+require("dotenv").config();
+const express = require("express");
 const app = express();
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const path = require('path');
-const config = require('./config/key');
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const path = require("path");
+const config = require("./config/key");
+const mongoose = require("mongoose");
+const session = require("express-session");
 
-const mongoose = require('mongoose');
-const connect = mongoose.connect(config.mongoURI, { userNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false })
-    .then(() => console.log('MongoDB Connected...'))
-    .catch(err => console.log(err));
+const connect = mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected..."))
+  .catch((err) => console.log(err));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 app.use(cookieParser());
 
-app.use('/api/users', require('./routes/users'));
-app.use('/api/comment', require('./routes/comment'));
-app.use('/api/like', require('./routes/like'));
-app.use('/api/favorite', require('./routes/favorite'));
+app.use("/api/user", require("./routes/users"));
+// app.use("/api/comment", require("./routes/comment"));
+// app.use("/api/like", require("./routes/like"));
+// app.use("/api/favorite", require("./routes/favorite"));
+app.use("/api/movie", require("./routes/movie"));
 
 app.get('/movie/"movieId', function (req, res) {
-    res.cookie('cross-site-cookie', 'bar', { sameSite: 'none', secure: true });
+  res.cookie("cross-site-cookie", "bar", { sameSite: "none", secure: true });
 });
 
-app.get('*', function (req, res) {
-    res.status(404).send('You are in the wrong place');
+app.get("*", function (req, res) {
+  res.status(404).send("You are in the wrong place");
 });
 
-const port = process.env.port || 5000
+const port = process.env.port || 5001;
 
 app.listen(port, () => {
-    console.log(`Sever Running at ${port}`)
+  console.log(`Sever Running at ${port}`);
 });
