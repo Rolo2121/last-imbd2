@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import Nav from "./Nav";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "../index.css";
 import { Form, Input, Button, Radio, Select, Cascader, DatePicker, InputNumber, TreeSelect, Switch, Checkbox, Upload } from "antd";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-const App = () => {
+const App = ({ onLogin }) => {
+  const navigate = useNavigate();
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [componentDisabled, setComponentDisabled] = useState(false);
@@ -43,7 +46,7 @@ const App = () => {
         <Form.Item label="Email" name="email">
           <Input />
         </Form.Item>
-        <Form.Item label="Username" name="username">
+        <Form.Item label="Name" name="name">
           <Input />
         </Form.Item>
         <Form.Item label="Password" name="password">
