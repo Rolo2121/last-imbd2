@@ -30,10 +30,6 @@ app.use("/api/user", require("./routes/users"));
 // app.use("/api/favorite", require("./routes/favorite"));
 app.use("/api/movie", require("./routes/movie"));
 
-app.get('/movie/"movieId', function (req, res) {
-  res.cookie("cross-site-cookie", "bar", { sameSite: "none", secure: true });
-});
-
 app.get("*", function (req, res) {
   res.status(404).send("You are in the wrong place");
 });

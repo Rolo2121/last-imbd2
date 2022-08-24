@@ -3,7 +3,6 @@ import 'antd/dist/antd.css';
 import '../index.css';
 import './CreateAccount.js';
 import Nav from './Nav';
-import { useNavigate } from 'react-router-dom';
 import {
 	PageHeader,
 	Breadcrumb,
@@ -21,30 +20,24 @@ import {
 import { UserOutlined } from '@ant-design/icons';
 
 import MovieCard from '../MovieCard';
+import { getMovieByName } from '../api/theMovieDB';
+import { useNavigate } from 'react-router-dom';
 
 const { Header, Content, Footer } = Layout;
 
-const AppLayout = () => {
+const AppLayout = ({ setMovie, movies, onAdd }) => {
 	const navigate = useNavigate();
-	const onFinish = (values) => {
-		navigate(`/movie/${values.movieName}`);
+	const onFinish = async (values) => {
+		const movie = await getMovieByName(values.movieName);
+		setMovie(movie);
+		navigate(`/movie`);
 	};
 	const onFinishFailed = (errorInfo) => {
 		console.log(errorInfo);
 	};
 	const [form] = Form.useForm();
 	const onFormLayoutChange = (fdata) => {};
-	const [movies, setMovies] = useState([]);
 
-	useEffect(() => {
-		const getMovies = async () => {
-			const response = await fetch('/api/movie');
-			console.log(response);
-			const data = await response.json();
-			setMovies(data);
-		};
-		getMovies();
-	}, []);
 	return (
 		<Layout className="layout">
 			<Nav />
@@ -74,7 +67,7 @@ const AppLayout = () => {
 					<Row gutter={[16, 16]}>
 						{movies.map((movie) => (
 							<Col xs={24} sm={12} md={8} lg={6} xlg={4}>
-								<MovieCard movie={movie} />
+								<MovieCard movie={movie} onAdd={onAdd} />
 							</Col>
 						))}
 					</Row>

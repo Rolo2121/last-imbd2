@@ -1,15 +1,28 @@
 import { Button, Card } from 'antd';
-import { HeartOutlined } from '@ant-design/icons';
+import { HeartOutlined, DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export default function MovieCard({ movie }) {
+export default function MovieCard({ movie, type, onRemove, onAdd }) {
 	const navigate = useNavigate();
 	async function addToWatchlist() {
 		try {
 			const response = await axios.post('/api/user/watchlist/' + movie._id);
+			onAdd(movie._id);
 		} catch (error) {
-			navigate('/login');
+			if (error.status === 403) {
+				navigate('/login');
+			}
+		}
+	}
+	async function deleteFromWatchlist() {
+		try {
+			const response = await axios.delete('/api/user/watchlist/' + movie._id);
+			onRemove(movie._id);
+		} catch (error) {
+			if (error.status === 403) {
+				navigate('/login');
+			}
 		}
 	}
 	return (
@@ -23,9 +36,15 @@ export default function MovieCard({ movie }) {
 			extra={movie.genre}
 			title={movie.title}
 			actions={[
-				<Button onClick={addToWatchlist}>
-					<HeartOutlined />
-				</Button>,
+				type === 'watchlist' ? (
+					<Button onClick={deleteFromWatchlist}>
+						<DeleteOutlined />
+					</Button>
+				) : (
+					<Button onClick={addToWatchlist}>
+						<HeartOutlined />
+					</Button>
+				),
 			]}
 			//   size="small"
 		>
