@@ -74,12 +74,13 @@ function App() {
                 setMovie={(movie) => {
                   setMovie(movie);
                 }}
+                setMovies={setMovies}
                 movies={movies}
                 onAdd={addToWatchlist}
               />
             }
           />
-          <Route path="/movie" element={<Movie movie={movie} />} />
+          <Route path="/movie/:id" element={<Movie movie={movie} />} />
           <Route path="/watchlist" element={<Watchlist watchlist={watchlist} onRemove={removeFromWatchlist} />} />
         </Routes>
       </div>

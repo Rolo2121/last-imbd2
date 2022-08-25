@@ -25,11 +25,15 @@ router.post("/login", async function (req, res) {
     if (!user) {
       return res.sendStatus(400);
     }
-    user.comparePassword(req.body.password, (error, match) => {
-      if (!match) {
-        return res.sendStatus(400);
-      }
-    });
+    // bcrypt.compareSync(plaintext, this.password);
+    // user.comparePassword(req.body.password, (error, match) => {
+    //   if (!match) {
+    //     return res.sendStatus(400);
+    //   }
+    // }); bcrypt.hashSync(this.password, 10)
+    if (bcrypt.hashSync(req.body.password, 10) !== user.password) {
+      res.sendStatus(400);
+    }
     req.session.userId = user._id;
     res.sendStatus(200);
   } catch (error) {
@@ -39,7 +43,7 @@ router.post("/login", async function (req, res) {
 
 router.get("/ping", auth, async function (req, res) {
   try {
-    res.sendStatus(req.user ? 200 : 400);
+    res.sendStatus(req.session.userId ? 200 : 400);
   } catch (error) {
     res.status(500).send(error);
   }

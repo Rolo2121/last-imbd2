@@ -11,8 +11,19 @@ import { useParams } from "react-router-dom";
 
 const { Header, Content, Footer } = Layout;
 
-const Movie = ({ movie }) => {
+const Movie = ({}) => {
   const tags = [1, 2, 3];
+  const [movie, setMovie] = useState({});
+  const { id } = useParams();
+  useEffect(() => {
+    const getMovies = async () => {
+      const response = await fetch("/api/movie/movie/" + id);
+      console.log(response);
+      const data = await response.json();
+      setMovie(data);
+    };
+    getMovies();
+  }, []);
   return (
     <>
       <Nav />
@@ -23,9 +34,9 @@ const Movie = ({ movie }) => {
           </Col>
 
           <Col xs={24} sm={12}>
-            <h2>{movie.releaseDate.split("-")[0]}</h2>
+            <h2>{movie.createdAt}</h2>
             <h1>{movie.title}</h1>
-            {tags.map((tag) => (
+            {tags?.map((tag) => (
               <Tag>{tag}</Tag>
             ))}
             <div style={{ display: "flex" }}>
@@ -41,11 +52,11 @@ const Movie = ({ movie }) => {
                 <span style={{ fontWeight: "bold" }}>Original Title:</span> {movie.title}{" "}
               </p>
               <p>
-                <span style={{ fontWeight: "bold" }}>Release Date:</span> {movie.releaseDate}{" "}
+                <span style={{ fontWeight: "bold" }}>Release Date:</span> {movie.createdAt}{" "}
               </p>
 
               <h2>Overview</h2>
-              <p>{movie.overview}</p>
+              <p>{movie?.overview}</p>
             </div>
           </Col>
         </Row>
