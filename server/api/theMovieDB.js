@@ -1,32 +1,60 @@
 // const { builtinModules } = require("module");
 // import axios from 'axios';
-const axios = require('axios');
+const axios = require("axios");
 
 const API_KEY = process.env.API_KEY;
 
-const getMovieUrl = (query) =>
-	`https://api.themoviedb.org/3/search/movie/?api_key=${API_KEY}&query=${query}`;
-const getGenreUrl = () =>
-	`https://api.themoviedb.org/3/genre/movie/list?api_key=08389134f27bb5c7051579d94ad25dbd&language=en-US`;
+const getMovieUrl = (id) => `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`;
+const getMovieSearchUrl = (query) => `https://api.themoviedb.org/3/search/movie/?api_key=${API_KEY}&query=${query}`;
+const getGenreUrl = () => `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`;
 
-async function getMovieByName(name) {
-	const url = getMovieUrl(name);
-	const movieResponse = await axios.get(url);
-	const firstMovie = movieResponse.data.results[0];
+async function getMoviesByName(name) {
+  try {
+    const url = getMovieSearchUrl(name);
+    const movieResponse = await axios.get(url);
 
-	const genreResponse = await axios.get(getGenreUrl());
-	const genres = genreResponse.data.genres;
+    const genreResponse = await axios.get(getGenreUrl());
+    const genres = genreResponse.data.genres;
 
-	console.log(firstMovie);
-	const parsedMovie = {
-		title: firstMovie.original_title,
-		rating: firstMovie.vote_average,
-		poster: `https://image.tmdb.org/t/p/w500${firstMovie.poster_path}`,
-		genres: firstMovie.genre_ids
-			.map((id) => genres.find((genre) => genre.id === id).name)
-			.join(', '),
-	};
-	return parsedMovie;
+    // Get the first 10 movies
+    const parsedMovies = movieResponse.data.results.slice(0, 10).map((movie) => ({
+      tmdbId: movie.id,
+      title: movie.original_title,
+      rating: movie.vote_average,
+      poster: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+      genres: movie.genre_ids.map((id) => genres.find((genre) => genre.id === id).name).join(", "),
+    }));
+
+    return parsedMovies;
+  } catch (error) {
+    console.error(error);
+  }
+
+  return [];
 }
 
-module.exports = { getMovieByName };
+async function getMovieById(id) {
+  try {
+    const url = getMovieUrl(id);
+    const movieResponse = await axios.get(url);
+
+    // Get the first 10 movies
+    const parsedMovie = {
+      tmdbId: movieResponse.data.id,
+      title: movieResponse.data.original_title,
+      rating: movieResponse.data.vote_average,
+      poster: `https://image.tmdb.org/t/p/w500${movieResponse.data.poster_path}`,
+      genres: movieResponse.data.genres.map((genre) => genre.name).join(", "),
+      overview: movieResponse.data.overview,
+      createdAt: movieResponse.data.release_date,
+    };
+
+    return parsedMovie;
+  } catch (error) {
+    console.error(error);
+  }
+
+  return null;
+}
+
+module.exports = { getMoviesByName, getMovieById };

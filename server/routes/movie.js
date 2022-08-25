@@ -3,7 +3,7 @@ const router = express.Router();
 const Movie = require("../models/Movie");
 //const { auth } = require("../middleware/auth");
 var sanitize = require("mongo-sanitize");
-const { getMovieByName } = require("../api/theMovieDB");
+const { getMoviesByName, getMovieById } = require("../api/theMovieDB");
 
 // router.post("/", auth, async (req, res) => {
 router.post("/", async (req, res) => {
@@ -19,20 +19,26 @@ router.get("/", async (req, res) => {
   const movies = await Movie.find({});
   res.json(movies);
 });
+
 router.get("/movie/:id", async (req, res) => {
   const movies = await Movie.findById(req.params.id);
   res.json(movies);
 });
 
+router.get("/tmdb/:id", async (req, res) => {
+  res.json(await getMovieById(req.params.id));
+});
+
 router.get("/search/:movie_name", async (req, res) => {
-  const foundMovie = await Movie.find({});
-  if (req.params.movie_name && req.params.movie_name != "undefined") {
-    console.log(req.params);
-    res.json(foundMovie.filter((movie) => movie.title?.toLowerCase().includes(req.params.movie_name.toLowerCase())));
-  } else {
-    console.log(333);
-    res.send(foundMovie);
-  }
+  // const foundMovie = await Movie.find({});
+  // if (req.params.movie_name && req.params.movie_name != "undefined") {
+  //   console.log(req.params);
+  //   res.json(foundMovie.filter((movie) => movie.title?.toLowerCase().includes(req.params.movie_name.toLowerCase())));
+  // } else {
+  //   console.log(333);
+  //   res.send(foundMovie);
+  // }
+  res.send(await getMoviesByName(req.params.movie_name));
 });
 
 module.exports = router;

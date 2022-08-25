@@ -17,7 +17,7 @@ const Movie = ({}) => {
   const { id } = useParams();
   useEffect(() => {
     const getMovies = async () => {
-      const response = await fetch("/api/movie/movie/" + id);
+      const response = await fetch("/api/movie/tmdb/" + id);
       console.log(response);
       const data = await response.json();
       setMovie(data);
@@ -34,8 +34,9 @@ const Movie = ({}) => {
           </Col>
 
           <Col xs={24} sm={12}>
-            <h2>{movie.createdAt}</h2>
-            <h1>{movie.title}</h1>
+            <h1>
+              {movie.title} {movie && movie.createdAt && `(${movie.createdAt.split("-")[0]})`}
+            </h1>
             {tags?.map((tag) => (
               <Tag>{tag}</Tag>
             ))}

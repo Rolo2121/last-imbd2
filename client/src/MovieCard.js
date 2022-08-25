@@ -29,7 +29,7 @@ export default function MovieCard({ movie, type, onRemove, onAdd }) {
     <Card
       hoverable
       onClick={() => {
-        navigate("/movie/" + movie._id);
+        navigate("/movie/" + movie.tmdbId);
       }}
       style={{
         width: "100%",

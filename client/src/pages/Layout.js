@@ -7,7 +7,7 @@ import { PageHeader, Breadcrumb, Layout, Menu, Col, Row, TimePicker, Form, Input
 import { UserOutlined } from "@ant-design/icons";
 
 import MovieCard from "../MovieCard";
-import { getMovieByName } from "../api/theMovieDB";
+import { getMoviesByName } from "../api/theMovieDB";
 import { useNavigate } from "react-router-dom";
 
 const { Header, Content, Footer } = Layout;
@@ -15,7 +15,7 @@ const { Header, Content, Footer } = Layout;
 const AppLayout = ({ setMovie, setMovies, movies, onAdd }) => {
   const navigate = useNavigate();
   const onFinish = async (values) => {
-    const movies = await getMovieByName(values.movieName);
+    const movies = await getMoviesByName(values.movieName);
     setMovies(movies);
   };
   const onFinishFailed = (errorInfo) => {
