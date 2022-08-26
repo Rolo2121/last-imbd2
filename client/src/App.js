@@ -7,6 +7,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Movie from "./pages/Movie";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useQuery, gql } from '@apollo/client';
 
 // import { ifError } from 'assert';
 function App() {
