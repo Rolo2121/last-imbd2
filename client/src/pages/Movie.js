@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import {useQuery} from "@apollo/client";
 import "antd/dist/antd.css";
 import "../index.css";
 import "./CreateAccount.js";
@@ -8,10 +8,12 @@ import Comments from "./Comments";
 import { PageHeader, Breadcrumb, Layout, Menu, Col, Row, TimePicker, Form, Input, Button, Space, Card, Image, Tag } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
+import { GET_MOVIES } from "../utils/queries";
 
 const { Header, Content, Footer } = Layout;
 
 const Movie = ({ movie }) => {
+  
   const tags = [1, 2, 3];
   return (
     <>

@@ -1,14 +1,18 @@
 import { Button, Card } from 'antd';
 import { HeartOutlined, DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import {useMutation} from '@apollo/client'
+import { UPDATE_WATCHLIST, DELETE_WATCHLIST } from './utils/mutations';
 import { useNavigate } from 'react-router-dom';
 
 export default function MovieCard({ movie, type, onRemove, onAdd }) {
 	const navigate = useNavigate();
+	const [mutateFunction, {data: updatedWatchlist}] = useMutation(UPDATE_WATCHLIST)
+	const [deleteFunction] = useMutation(DELETE_WATCHLIST)
 	async function addToWatchlist() {
 		try {
-			const response = await axios.post('/api/user/watchlist/' + movie._id);
 			onAdd(movie._id);
+			mutateFunction({variables: {movieId: movie._id}})
 		} catch (error) {
 			if (error.status === 403) {
 				navigate('/login');
@@ -19,6 +23,7 @@ export default function MovieCard({ movie, type, onRemove, onAdd }) {
 		try {
 			const response = await axios.delete('/api/user/watchlist/' + movie._id);
 			onRemove(movie._id);
+			deleteFunction({variables: {movieId: movie._id}})
 		} catch (error) {
 			if (error.status === 403) {
 				navigate('/login');

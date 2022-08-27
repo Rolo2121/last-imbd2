@@ -7,15 +7,19 @@ import "../index.css";
 import { Form, Input, Button, Radio, Select, Cascader, DatePicker, InputNumber, TreeSelect, Switch, Checkbox, Upload } from "antd";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
+import {useMutation} from "@apollo/client";
+import { UPDATE_ACCOUNT } from "../utils/mutations";
 
 const App = ({ onLogin }) => {
+  const [mutateFunction, {data}]= useMutation(UPDATE_ACCOUNT);
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [componentDisabled, setComponentDisabled] = useState(false);
   const onFinish = async (values) => {
     try {
-      const response = await axios.post("/api/user/signup", values);
+      //const response = await axios.post("/api/user/signup", values);
+      mutateFunction({variables: values})
       onLogin();
       navigate("/watchlist");
     } catch (error) {
