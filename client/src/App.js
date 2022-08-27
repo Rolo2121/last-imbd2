@@ -30,12 +30,12 @@ function App() {
 	}
 
 	function removeFromWatchlist(id) {
-		setWatchlist(watchlist.filter((entry) => entry._id !== id));
+		GET_WATCHLIST(watchlist.filter((entry) => entry._id !== id));
 	}
 	function addToWatchlist(id) {
 		const foundMovie = movies.find((movie) => movie._id === id);
 		if (foundMovie) {
-			setWatchlist([...watchlist, foundMovie]);
+			GET_WATCHLIST([...watchlist, foundMovie]);
 			mutateFunction({ variables: { movieId: foundMovie._id } });
 		}
 	}
