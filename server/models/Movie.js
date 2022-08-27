@@ -1,10 +1,29 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require("mongoose");
 
-const schema = mongoose.Schema(
+const movieSchema = new Schema(
   {
+    externalMovieId: {
+      type: Number,
+      required: true,
+      unique: true,
+    },
+    rating: {
+      type: Number,
+      required: true,
+    },
+    voteCount: {
+      type: Number,
+    },
     title: {
       type: String,
       required: true,
+    },
+    overview: {
+      type: String,
+      required: true,
+    },
+    releaseDate: {
+      type: String,
     },
     poster: {
       type: String,
@@ -14,14 +33,13 @@ const schema = mongoose.Schema(
       type: String,
       required: true,
     },
-    rating: {
-      type: Number,
-      required: true,
+    trailer: {
+      type: String,
     },
   },
   { timestamps: true }
 );
 
-const Movie = mongoose.model("Movie", schema);
+const Movie = model("Movie", movieSchema);
 
 module.exports = Movie;
