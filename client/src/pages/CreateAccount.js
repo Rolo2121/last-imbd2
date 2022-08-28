@@ -3,7 +3,6 @@ import { PlusOutlined } from '@ant-design/icons';
 import { useMutation } from '@apollo/client';
 import { UPDATE_ACCOUNT } from '../utils/mutations';
 import Nav from './Nav';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../index.css';
 import {

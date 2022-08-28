@@ -1,6 +1,5 @@
 import { Button, Card } from 'antd';
 import { HeartOutlined, DeleteOutlined } from '@ant-design/icons';
-import axios from 'axios';
 import {useMutation} from '@apollo/client'
 import { UPDATE_WATCHLIST, DELETE_WATCHLIST } from './utils/mutations';
 import { useNavigate } from 'react-router-dom';
