@@ -9,8 +9,10 @@ import Movie from './pages/Movie';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useQuery, gql, useMutation } from '@apollo/client';
+import { ADD_TO_WATCHLIST } from './utils/actions';
 import { GET_WATCHLIST } from './utils/queries';
 import { UPDATE_WATCHLIST } from './utils/mutations';
+import {GET_MOVIES} from './utils/queries'
 
 // import { ifError } from 'assert';
 function App() {
