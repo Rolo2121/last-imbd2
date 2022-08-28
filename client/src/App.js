@@ -7,7 +7,6 @@ import { Routes, Route, BrowserRouter, Switch } from 'react-router-dom';
 
 import Movie from './pages/Movie';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useQuery, gql, useMutation } from '@apollo/client';
 //import { ADD_TO_WATCHLIST } from './utils/actions';
 import { GET_WATCHLIST } from './utils/queries';
@@ -22,6 +21,7 @@ function App() {
 	const [mutateFunction, { data: updatedWatchlist }] =
 		useMutation(UPDATE_WATCHLIST);
 	const [movie, setMovie] = useState(null);
+	const [Watchlist, setWatchlist] = useState([]);
 
 	function login() {
 		setLoggedIn(true);
