@@ -17,7 +17,7 @@ const resolvers = {
             throw new AuthenticationError('Not logged in');
         },
 
-        user: async () => {
+        users: async () => {
             return User.find()
                 .select('-__v -password')
                 .populate('dislikedMovies')
@@ -42,7 +42,7 @@ const resolvers = {
                 .populate('likedUsers');
         },
 
-        movie: async () => {
+        movies: async () => {
             return Movie.find()
                 .select('-__v')
                 .populate('dislikedUsers')

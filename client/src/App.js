@@ -9,7 +9,7 @@ import Movie from './pages/Movie';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useQuery, gql, useMutation } from '@apollo/client';
-import { ADD_TO_WATCHLIST } from './utils/actions';
+//import { ADD_TO_WATCHLIST } from './utils/actions';
 import { GET_WATCHLIST } from './utils/queries';
 import { UPDATE_WATCHLIST } from './utils/mutations';
 import {GET_MOVIES} from './utils/queries'
@@ -31,12 +31,12 @@ function App() {
 	}
 
 	function removeFromWatchlist(id) {
-		setWatchlist(watchlist.filter((entry) => entry._id !== id));
+		//setWatchlist(watchlist.filter((entry) => entry._id !== id));
 	}
 	function addToWatchlist(id) {
 		const foundMovie = movies.find((movie) => movie._id === id);
 		if (foundMovie) {
-			setWatchlist([...watchlist, foundMovie]);
+			//setWatchlist([...watchlist, foundMovie]);
 			mutateFunction({ variables: { movieId: foundMovie._id } });
 		}
 	}

@@ -28,11 +28,13 @@ const { Header, Content, Footer } = Layout;
 
 const AppLayout = ({ setMovie, movies, onAdd }) => {
   const [GetMoviesByName, { data }] = useLazyQuery(GET_MOVIES_BY_NAME);
+  //const [movies, setMovies] = useState([])
   const navigate = useNavigate();
   const onFinish = async (values) => {
     //const movie = await getMovieByName(values.movieName);
-    GetMoviesByName({ variables: values });
-    //setMovie(movie);
+    const movies = await GetMoviesByName({ variables: values });
+    console.log({movies})
+    //setMovies(movies);
     //navigate(`/movie`);
   };
   const onFinishFailed = (errorInfo) => {
@@ -70,7 +72,7 @@ const AppLayout = ({ setMovie, movies, onAdd }) => {
           </Form>
 
           <Row gutter={[16, 16]}>
-            {movies.map((movie) => (
+            {movies?.map((movie) => (
               <Col xs={24} sm={12} md={8} lg={6} xlg={4}>
                 <MovieCard movie={movie} onAdd={onAdd} />
               </Col>
