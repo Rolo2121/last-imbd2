@@ -1,7 +1,7 @@
 const { User, Movie } = require('../models');
 const { signToken } = require('../utils/auth');
 const {AuthenticationError } = require('apollo-server-express');
-
+const bcrypt = require ('bcrypt')
 const resolvers = {
     Query: {
         me: async (parent, args, contect) => {
@@ -51,11 +51,17 @@ const resolvers = {
     },
 
     Mutation: {
-        addUser: async (parent, args) => {
+        signup: async (parent, args) => {
             const user = await User.create(args);
-            const token = signToken(user);
+          
+                console.log(user)
 
-            return { token, user };
+                    const userData = await User.
+                    findOne({username: args.username})
+                    const token = signToken(userData);
+                    return { token, user: userData };
+
+           
         },
 
         login: async (parent, { email, password }) => {
@@ -64,7 +70,9 @@ const resolvers = {
             if (!user) {
                 throw new AuthenticationError('Incorrect credentials');
             }
-
+             if (!bcrypt.compare(password, user.password)){
+                throw new AuthenticationError('Incorrect credentials');
+             }
             const token = signToken(user);
             return { token, user };
         },

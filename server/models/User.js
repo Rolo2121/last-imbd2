@@ -1,32 +1,34 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
+const Movie = require ('./Movie')
 
 const userSchema = new Schema(
 	{
-		name: {
-			type: String,
+		username: {
+			type: Schema.Types.String,
 			required: true,
 			unique: true,
 		},
 		email: {
-			type: String,
+			type: Schema.Types.String,
 			required: true,
 			unique: true,
 			match: [/.+@.+\..+/, 'Must use a valid email address'],
 		},
 		password: {
-			type: String,
+			type: Schema.Types.String,
 			required: true,
 		},
 		watchlist: [{
-			type: mongoose.Types.ObjectId,
+			type: Schema.Types.ObjectId,
 			ref: 'Movie',
 		}],
-		timestamps: true,
-		collection: 'users',
-	}
-		
+	
+	},
+	{timestamps: true,
+		collection: 'users',}		
 );
+
 userSchema.pre('save', async function (next) {
 	if (this.isNew || this.isModified('password')) {
 		const saltRounds = 10;

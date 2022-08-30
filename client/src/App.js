@@ -41,7 +41,7 @@ function App() {
 		}
 	}
 
-	useEffect(() => {
+	/*useEffect(() => {
 		async function checkLoggedIn() {
 			try {
 				const axios = await axios.get('/api/user/ping');
@@ -49,7 +49,7 @@ function App() {
 			} catch (error) {}
 		}
 		checkLoggedIn();
-	}, []);
+	}, []);*/
 
 	//
 

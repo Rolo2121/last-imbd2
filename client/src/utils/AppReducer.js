@@ -9,6 +9,14 @@ export const reducer = (state, action) => {
 				...state,
 				movies: action.movies,
 			};
+		case "SET_USER":
+			console.log("SET_USER")
+			return {
+				...state,
+				currentUser: {
+					name: "bob", token: null
+				}
+			}
 		default:
 			return state ? state : '';
 	}

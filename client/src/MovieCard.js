@@ -18,7 +18,7 @@ export default function MovieCard({ movie, type, onRemove, onAdd }) {
 			}
 		}
 	}
-	async function deleteFromWatchlist() {
+	/*async function deleteFromWatchlist() {
 		try {
 			const response = await axios.delete('/api/user/watchlist/' + movie._id);
 			onRemove(movie._id);
@@ -28,7 +28,7 @@ export default function MovieCard({ movie, type, onRemove, onAdd }) {
 				navigate('/login');
 			}
 		}
-	}
+	}*/
 	return (
 		<Card
 			hoverable
@@ -41,9 +41,10 @@ export default function MovieCard({ movie, type, onRemove, onAdd }) {
 			title={movie.title}
 			actions={[
 				type === 'watchlist' ? (
-					<Button onClick={deleteFromWatchlist}>
-						<DeleteOutlined />
-					</Button>
+					//<Button onClick={deleteFromWatchlist}>
+					//	<DeleteOutlined />
+					//</Button>
+					<></>
 				) : (
 					<Button onClick={addToWatchlist}>
 						<HeartOutlined />

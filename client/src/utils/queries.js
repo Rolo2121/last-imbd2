@@ -48,14 +48,7 @@ export const GET_MOVIES_BY_NAME = gql`
   }
 `;
 
-export const GET_LOGIN = gql`
-  query GetLogin($email: String!, $password: String!) {
-    users(email: $email, password: $password) {
-      email
-      id
-    }
-  }
-`;
+
 
 export const GET_WATCHLIST = gql`
   query GetWatchlist($id: String!) {

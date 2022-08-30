@@ -2,17 +2,54 @@ import { gql } from "@apollo/client";
 
 export const UPDATE_ACCOUNT = gql`
   mutation UpdateUser(
-    $id: String!
-    $name: String
+
+    $username: String
     $email: String
     $password: String
   ) {
-    updateuser(name: $name, email: $email, password: $password)
-    id
-    name
+    addUser(username: $username, email: $email, password: $password)
+    {id
+    username
     email
-    password
+    password}
   }
+`;
+
+export const SIGNUP_MUTATION = gql`
+mutation SignupMutation( 
+  $username: String
+  $email: String
+  $password: String
+) {
+  signup(username: $username, email: $email, password: $password){
+    token
+    user{
+      id
+    }
+
+  }
+
+}
+
+
+`;
+
+export const LOGIN_MUTATION = gql`
+mutation LoginMutation( 
+  $email: String
+  $password: String
+) {
+  login(email: $email, password: $password){
+    token
+    user{
+      id
+    }
+
+  }
+
+}
+
+
 `;
 
 export const UPDATE_WATCHLIST = gql`

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { useMutation } from '@apollo/client';
-import { UPDATE_ACCOUNT } from '../utils/mutations';
+import { SIGNUP_MUTATION, UPDATE_ACCOUNT } from '../utils/mutations';
 import Nav from './Nav';
 import { useNavigate } from 'react-router-dom';
 import '../index.css';
@@ -23,7 +23,7 @@ const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 const App = ({ onLogin }) => {
-	const [mutateFunction, { data }] = useMutation(UPDATE_ACCOUNT);
+	const [mutateFunction, { data }] = useMutation(SIGNUP_MUTATION);
 	const navigate = useNavigate();
 	const [form] = Form.useForm();
 	const [fileList, setFileList] = useState([]);
@@ -33,7 +33,7 @@ const App = ({ onLogin }) => {
 			//const response = await axios.post("/api/user/signup", values);
 			mutateFunction({ variables: values });
 			onLogin();
-			navigate('/watchlist');
+			navigate('/');
 		} catch (error) {
 			console.error(error.response);
 		}
@@ -61,7 +61,7 @@ const App = ({ onLogin }) => {
 				<Form.Item label="Email" name="email">
 					<Input />
 				</Form.Item>
-				<Form.Item label="Name" name="name">
+				<Form.Item label="Username" name="username">
 					<Input />
 				</Form.Item>
 				<Form.Item label="Password" name="password">

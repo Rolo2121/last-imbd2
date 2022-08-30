@@ -3,23 +3,30 @@ import { useNavigate } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import Nav from "./Nav";
 import "../index.css";
-import {useLazyQuery} from "@apollo/client";
+import {useLazyQuery, useMutation} from "@apollo/client";
 import { Form, Input, Button, Radio, Select, Cascader, DatePicker, InputNumber, TreeSelect, Switch, Checkbox, Upload } from "antd";
-import { GET_LOGIN } from "../utils/queries";
+import { LOGIN_MUTATION } from "../utils/mutations";
+import { useValue } from "../utils/GlobalState";
+import { GlobalContext } from "../utils/GlobalState";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 const Login = ({ onLogin }) => {
-  const[GetLogin,{data}] = useLazyQuery(GET_LOGIN);
+  const[loginMutation,{data}] = useMutation(LOGIN_MUTATION);
   const navigate = useNavigate();
   const [form] = Form.useForm();
-
+  const {currentUser, dispatch} = useValue()
+  console.log(currentUser)
+  console.log(useValue())
+  console.log(dispatch)
+  console.log(GlobalContext)
   const onFinish = async (values) => {
     try {
       //const response = await axios.post("/api/user/login", values);
-      GetLogin(values);
+      loginMutation({variables: values});
       onLogin();
-      navigate("/watchlist");
+      navigate("/");
+     dispatch({type: 'SET_USER', action:null})
     } catch (error) {
       console.error(error.response);
     }

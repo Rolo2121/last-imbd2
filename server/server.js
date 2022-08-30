@@ -16,9 +16,8 @@ const server = new ApolloServer({
   context: authMiddleware,
 });
 
-server.applyMiddleware({ app });
-
-app.use(express.urlencoded({ extended: true }));
+server.start().then(() => {
+  app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 if (process.env.NODE_ENV === "production") {
@@ -29,12 +28,19 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
-db.once("open", () => {
-  app.listen(PORT, () => {
-    console.log(`Now listening on localhost:${PORT}`);
-    console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
+
+  server.applyMiddleware({ app })
+console.log(333)
+  db.once("open", (args) => {
+    console.log(args)
+    app.listen(PORT, () => {
+      console.log(`Now listening on localhost:${PORT}`);
+      console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
+    });
   });
-});
+})
+
+
 
 // const bodyParser = require("body-parser");
 // const cookieParser = require("cookie-parser");

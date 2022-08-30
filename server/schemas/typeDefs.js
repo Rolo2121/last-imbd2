@@ -24,7 +24,7 @@ const typeDefs= gql`
         movies: [Movie]
     }
     type Mutation {
-        addUser(email: String, username: String, password: String): UserResponse
+        signup(email: String, username: String, password: String): UserResponse
         login(email: String, password: String): UserResponse
         addFriend(friendId: String): User
         addMovie: Movie
