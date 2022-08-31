@@ -10,8 +10,8 @@ export const GET_USERS = gql`
 `;
 
 export const GET_MOVIES = gql`
-  query GetMovies {
-    movies {
+  query GetMovies($title: String) {
+    movies(title: $title) {
       id
       title
       overview
@@ -23,7 +23,7 @@ export const GET_MOVIES = gql`
 `;
 
 export const GET_MOVIE = gql`
-  query GetMovie($id: Number!) {
+  query GetMovie($id: String!) {
     movie(id: $id) {
       id
       title
@@ -35,7 +35,19 @@ export const GET_MOVIE = gql`
   }
 `;
 
-export const GET_MOVIES_BY_NAME = gql`
+export const GET_COMMENTS = gql`
+query GetComments($postId: String!) {
+  comments(postId: $postId) {
+    id
+    content
+    date
+    writer
+  }
+}
+
+`;
+
+/*export const GET_MOVIES_BY_NAME = gql`
   query GetMoviesByName($title: String) {
     movies(title: $title) {
       id
@@ -46,7 +58,7 @@ export const GET_MOVIES_BY_NAME = gql`
       releaseDate
     }
   }
-`;
+`;*/
 
 
 

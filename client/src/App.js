@@ -76,7 +76,7 @@ function App() {
 								/>
 							}
 						/>
-						<Route path="/movie" element={<Movie movie={movie} />} />
+						<Route path="/movie/:id" element={<Movie  />} />
 						<Route
 							path="/watchlist"
 							element={

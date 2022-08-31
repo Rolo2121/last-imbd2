@@ -4,14 +4,16 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_WATCHLIST, DELETE_WATCHLIST } from './utils/mutations';
 import { useNavigate } from 'react-router-dom';
 
-export default function MovieCard({ movie, type, onRemove, onAdd }) {
+export default function MovieCard({ movie, type, onRemove }) {
+	console.log(movie)
 	const navigate = useNavigate();
 	const [mutateFunction, { data: updatedWatchlist }] =
 		useMutation(UPDATE_WATCHLIST);
 	const [deleteFunction] = useMutation(DELETE_WATCHLIST);
-	async function addToWatchlist() {
+	 function addToWatchlist(event) {
+		event.preventDefault()
+		event.stopPropagation()
 		try {
-			onAdd(movie._id);
 			mutateFunction({ variables: { movieId: movie._id } });
 		} catch (error) {
 			if (error.status === 403) {
@@ -40,6 +42,9 @@ export default function MovieCard({ movie, type, onRemove, onAdd }) {
 			cover={<img src={movie.poster} />}
 			extra={movie.genre}
 			title={movie.title}
+			onClick={() => {
+				navigate(`/movie/${movie.id}`)
+			}}
 			actions={[
 				type === 'watchlist' ? (
 					//<Button onClick={deleteFromWatchlist}>

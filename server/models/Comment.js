@@ -8,6 +8,7 @@ const commentSchema = mongoose.Schema({
     },
     postId: {
         type: String,
+        ref: 'Movie'
     },
     responseTo: {
         type: Schema.Types.ObjectId,

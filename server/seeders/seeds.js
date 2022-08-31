@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const {faker} = require('@faker-js/faker');
 const db = require('../config/connection');
 const { Movie, User } = require('../models');
-
+console.log(faker)
 db.once('open', async () => {
   await Movie.deleteMany({});
   await User.deleteMany({});
@@ -18,9 +18,9 @@ db.once('open', async () => {
 
   const movieData = [];
   for (let i = 0; i < 50; i += 1) {
-    const externalMovieId = faker.random.number();
-    const rating = faker.random.number({ 'min': 0, 'max': 10 });
-    const voteCount = faker.random.number();
+    const externalMovieId = faker.random.numeric();
+    const rating = faker.random.numeric({ 'min': 0, 'max': 10 });
+    const voteCount = faker.random.numeric();
     const title = faker.commerce.productName();
     const overview = faker.lorem.words(Math.round(Math.random() * 20) + 1);
     const releaseDate = faker.date.past();
@@ -28,6 +28,7 @@ db.once('open', async () => {
     const trailer = faker.image.imageUrl();
     movieData.push({ externalMovieId, rating, voteCount, title, overview, releaseDate, poster, trailer });
   }
+  console.log(movieData)
   const createdMovies = await Movie.collection.insertMany(movieData);
 
   for (let i = 0; i < 100; i += 1) {

@@ -2,12 +2,17 @@ import { Avatar, Button, Comment, Form, Input, List } from 'antd';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined, DeleteOutlined } from '@ant-design/icons';
+import { useQuery } from '@apollo/client';
+import { GET_COMMENTS, } from '../utils/queries';
+import { COMMENT_MUTATION } from '../utils/mutations';
 const { TextArea } = Input;
 
-const CommentList = ({ comments }) => {
+const CommentList = ({ }) => {
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
   const [action, setAction] = useState(null);
+  const {data} = useQuery(GET_COMMENTS)
+  const comments = data?.comments || []
 
   const like = () => {
     setLikes(1);
@@ -37,8 +42,9 @@ const CommentList = ({ comments }) => {
         <span className='comment-action'><DeleteOutlined /></span>
       </span>
 
-];
-  return (
+];console.log(comments)
+  return comments &&(
+    
   <List
     dataSource={comments}
     header={`${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}
@@ -74,7 +80,7 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
 
 const App = () => {
 
-  const [comments, setComments] = useState([]);
+
   const [submitting, setSubmitting] = useState(false);
   const [value, setValue] = useState('');
 
@@ -85,7 +91,7 @@ const App = () => {
     setTimeout(() => {
       setSubmitting(false);
       setValue('');
-      setComments([
+     /* setComments([
         ...comments,
         {
           author: 'Han Solo',
@@ -93,7 +99,7 @@ const App = () => {
           content: <p>{value}</p>,
           datetime: moment().fromNow(),
         },
-      ]);
+      ]);*/
     }, 1000);
   };
 
@@ -103,7 +109,7 @@ const App = () => {
 
   return (
     <>
-      {comments.length > 0 && <CommentList comments={comments} />}
+      { <CommentList  />}
     
                 <Editor
             onChange={handleChange}

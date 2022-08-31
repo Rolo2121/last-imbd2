@@ -20,19 +20,20 @@ import {
 import { UserOutlined } from "@ant-design/icons";
 
 import MovieCard from "../MovieCard";
-import { GET_MOVIES_BY_NAME } from "../utils/queries";
+import { GET_MOVIES } from "../utils/queries";
 import { useNavigate } from "react-router-dom";
-import { useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 const { Header, Content, Footer } = Layout;
 
 const AppLayout = ({ setMovie, movies, onAdd }) => {
-  const [GetMoviesByName, { data }] = useLazyQuery(GET_MOVIES_BY_NAME);
+  const {data, refetch} = useQuery(GET_MOVIES);
   //const [movies, setMovies] = useState([])
   const navigate = useNavigate();
   const onFinish = async (values) => {
     //const movie = await getMovieByName(values.movieName);
-    const movies = await GetMoviesByName({ variables: values });
+    console.log(values)
+    const movies = await refetch( values );
     console.log({movies})
     //setMovies(movies);
     //navigate(`/movie`);
@@ -61,7 +62,7 @@ const AppLayout = ({ setMovie, movies, onAdd }) => {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
-            <Form.Item label="Enter Movie Name:" name="movieName">
+            <Form.Item label="Enter Movie Name:" name="title">
               <Input placeholder="Find a Movie" />
             </Form.Item>
             <Form.Item>
@@ -72,7 +73,7 @@ const AppLayout = ({ setMovie, movies, onAdd }) => {
           </Form>
 
           <Row gutter={[16, 16]}>
-            {movies?.map((movie) => (
+            {data?.movies?.map((movie) => (
               <Col xs={24} sm={12} md={8} lg={6} xlg={4}>
                 <MovieCard movie={movie} onAdd={onAdd} />
               </Col>

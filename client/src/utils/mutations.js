@@ -31,6 +31,23 @@ mutation SignupMutation(
 
 }
 
+`;
+
+export const COMMENT_MUTATION = gql`
+mutation CommentMutation(
+  $postId: String
+  $content: String
+
+) {
+  addComment(postId: $postId, content: $content){
+    id
+    writer
+    postId
+    content
+    date
+  }
+}
+
 
 `;
 

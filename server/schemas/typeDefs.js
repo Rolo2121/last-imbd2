@@ -7,6 +7,14 @@ const typeDefs= gql`
         overview: String
         rating: String
         releaseDate: String
+        poster: String
+    }
+    type Comment {
+        id: String
+        writer: User
+       content: String
+       postId: Movie
+       date: String 
     }
     type User {
         id: String
@@ -20,8 +28,9 @@ const typeDefs= gql`
         me: User
         users: User
         user(username: String!): User
-        movie(movieId: String!): Movie
-        movies: [Movie]
+        movie(id: String!): Movie
+        movies(title: String): [Movie]
+        comments(postId: String!): [Comment] 
     }
     type Mutation {
         signup(email: String, username: String, password: String): UserResponse
@@ -30,6 +39,7 @@ const typeDefs= gql`
         addMovie: Movie
         likeMovie(movieId: String!): User
         dislikeMovie(movieId: String!): User
+        addComment(postId: String!, content: String!): Comment
     }
 `
 

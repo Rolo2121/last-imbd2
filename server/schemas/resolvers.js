@@ -1,4 +1,4 @@
-const { User, Movie } = require('../models');
+const { User, Movie, Comment } = require('../models');
 const { signToken } = require('../utils/auth');
 const {AuthenticationError } = require('apollo-server-express');
 const bcrypt = require ('bcrypt')
@@ -35,18 +35,22 @@ const resolvers = {
                 .populate('Movie.likedUsers');
         },
 
-        movie: async (parent, { movieId }) => {
-            return Movie.findOne({ _id: movieId })
+        movie: async (parent, { id }) => {
+            return Movie.findOne({ _id: id })
                 .select('-__v')
-                .populate('disliekdUsers')
-                .populate('likedUsers');
+                //.populate('disliekdUsers')
+                //.populate('likedUsers');
         },
 
-        movies: async () => {
-            return Movie.find()
+        comments: (parent, { postId }) => {
+            return Comment.find({postId}).select('-__v')
+        },
+
+        movies: async (parent, {title}) => {
+            return Movie.find(title?{title: new RegExp('.*'+ title+ '.*', 'i')}:{})
                 .select('-__v')
-                .populate('dislikedUsers')
-                .populate('likedUsers');
+               // .populate('dislikedUsers')
+               // .populate('likedUsers');
         }
     },
 
@@ -126,6 +130,14 @@ const resolvers = {
                 return updatedUser;
             }
             throw new AuthenticationError('You need to be logged in.')
+        },
+
+        addComment:  (parent, { postId, content }, context) => {
+            if (context.user) {
+                return Comment.insertOne({postId, content, writer: context.user._id, }).then((data) => {
+                    return data
+                })
+            }
         },
 
         dislikeMovie: async (parent, { movieId }, context) => {
