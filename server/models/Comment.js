@@ -20,8 +20,8 @@ const commentSchema = mongoose.Schema({
     date: { type: Date,
     default: Date.now
     }
-}, { timestamps: true })
+}, { timestamps: true, collection: 'comment' })
 
 const Comment = mongoose.model('Comment', commentSchema);
 
-module.exports = { Comment }
+module.exports =  Comment 

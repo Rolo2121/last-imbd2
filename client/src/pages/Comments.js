@@ -1,19 +1,29 @@
 import { Avatar, Button, Comment, Form, Input, List } from 'antd';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined, DeleteOutlined } from '@ant-design/icons';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import { GET_COMMENTS, } from '../utils/queries';
-import { COMMENT_MUTATION } from '../utils/mutations';
+import { COMMENT_MUTATION,  COMMENT_DELETE_MUTATION } from '../utils/mutations';
+
+
+import { useParams } from 'react-router-dom';
 const { TextArea } = Input;
 
-const CommentList = ({ }) => {
+const CommentList = ({ loading }) => {
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
   const [action, setAction] = useState(null);
-  const {data} = useQuery(GET_COMMENTS)
+  const [GetComments, {data, refetch, called}] = useLazyQuery(GET_COMMENTS)
+  const [deleteComment, {data: deleteData, loading: deleteLoading}] = useMutation(COMMENT_DELETE_MUTATION)
   const comments = data?.comments || []
-
+  const {id } = useParams()
+  useEffect(() => {
+    if (!loading &&!called){
+    GetComments({variables: {postId: id, writer: JSON.parse(localStorage.getItem('user')).id }})}else if(!deleteLoading) {
+      refetch()
+    }
+  }, [loading, called, deleteLoading])
   const like = () => {
     setLikes(1);
     setDislikes(0);
@@ -25,43 +35,50 @@ const CommentList = ({ }) => {
     setDislikes(1);
     setAction('disliked');
   };
-  const actions = [
 
-    <span onClick={like}>
-      {React.createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
-      <span className="comment-action">{likes}</span>
-    </span>
-  ,
-
-    <span onClick={dislike}>
-      {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined)}
-      <span 
-      className="comment-action">
-      {dislikes}</span> </span>,
-      <span>
-        <span className='comment-action'><DeleteOutlined /></span>
-      </span>
-
-];console.log(comments)
   return comments &&(
     
   <List
     dataSource={comments}
     header={`${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}
     itemLayout="horizontal"
-    renderItem={(props) =>   <Comment
-      actions={actions}
-      datetime={ <span>{moment().fromNow()}</span>}
-       author={<span>Han Solo</span>}
+    renderItem={(props) =>   {
+
+
+    return <Comment
+
+      actions={[
+
+        <span onClick={like}>
+          {React.createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
+          <span className="comment-action">{likes}</span>
+        </span>
+      ,
+    
+        <span onClick={dislike}>
+          {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined)}
+          <span 
+          className="comment-action">
+          {dislikes}</span> </span>,
+          <span>
+            <span 
+            onClick={() => {
+              deleteComment({variables: {id: props.id}})
+            }}
+            className='comment-action'><DeleteOutlined /></span> 
+          </span>
+    
+    ]}
+
+      datetime={ <span>{moment(props.date).fromNow()}</span>}
+       author={<span>{props.writer.username}</span>}
         avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Jazelle Pearce" />}
         content={
           <p>
-          We supply a series of design principles, practical patterns and high quality design
-          resources (Sketch and Axure), to help people create their product prototypes beautifully
-          and efficiently.
+            {props.content}
         </p>
         }
-      />}
+      />}}
   />
 )};
 
@@ -79,28 +96,16 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
 );
 
 const App = () => {
+const [CommentMutation, {loading, data}] = useMutation(COMMENT_MUTATION)
+const { id } = useParams()
 
-
-  const [submitting, setSubmitting] = useState(false);
   const [value, setValue] = useState('');
 
 
   const handleSubmit = () => {
     if (!value) return;
-    setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
-      setValue('');
-     /* setComments([
-        ...comments,
-        {
-          author: 'Han Solo',
-          avatar: 'https://joeschmoe.io/api/v1/random',
-          content: <p>{value}</p>,
-          datetime: moment().fromNow(),
-        },
-      ]);*/
-    }, 1000);
+    CommentMutation({variables:{ content: value, postId: id, writer: JSON.parse(localStorage.getItem('user')).id}})
+    setValue('')
   };
 
   const handleChange = (e) => {
@@ -109,12 +114,12 @@ const App = () => {
 
   return (
     <>
-      { <CommentList  />}
+      { <CommentList loading={loading}  />}
     
                 <Editor
             onChange={handleChange}
             onSubmit={handleSubmit}
-            submitting={submitting}
+            submitting={loading}
             value={value}
           />
     </>

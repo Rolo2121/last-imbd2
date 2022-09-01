@@ -42,8 +42,8 @@ const resolvers = {
                 //.populate('likedUsers');
         },
 
-        comments: (parent, { postId }) => {
-            return Comment.find({postId}).select('-__v')
+        comments: async (parent, { postId }) => {
+            return Comment.find({postId}).select('-__v').populate('writer')
         },
 
         movies: async (parent, {title}) => {
@@ -132,12 +132,22 @@ const resolvers = {
             throw new AuthenticationError('You need to be logged in.')
         },
 
-        addComment:  (parent, { postId, content }, context) => {
-            if (context.user) {
-                return Comment.insertOne({postId, content, writer: context.user._id, }).then((data) => {
+        addComment:  async (parent, { postId, content, writer }, context) => {
+            console.log(writer)
+            if (context.user || writer) {
+                console.log(Comment.insertOne)
+                return await Comment.create({postId, content, writer: context.user?._id || writer, }).then((data) => {
+                    console.log(data)
                     return data
                 })
             }
+        },
+
+        deleteComment: async (parent, {id}) => {
+           await Comment.remove({
+                _id: id
+            })
+            return true
         },
 
         dislikeMovie: async (parent, { movieId }, context) => {

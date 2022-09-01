@@ -35,16 +35,27 @@ mutation SignupMutation(
 
 export const COMMENT_MUTATION = gql`
 mutation CommentMutation(
-  $postId: String
-  $content: String
-
+  $postId: String!
+  $content: String!
+  $writer: String
 ) {
-  addComment(postId: $postId, content: $content){
+  addComment(postId: $postId, content: $content, writer: $writer){
     id
-    writer
-    postId
     content
     date
+
+  }
+}
+
+
+`;
+
+export const COMMENT_DELETE_MUTATION = gql`
+mutation CommentDeleteMutation(
+  $id: String!
+) {
+  deleteComment(id: $id) {
+    id
   }
 }
 

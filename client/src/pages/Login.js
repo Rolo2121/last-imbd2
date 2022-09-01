@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import Nav from "./Nav";
@@ -20,13 +20,21 @@ const Login = ({ onLogin }) => {
   console.log(useValue())
   console.log(dispatch)
   console.log(GlobalContext)
+  useEffect(() => {
+    if (data) {
+      console.log(data)
+      const { token, user} = data.login
+      localStorage.setItem('token', token)
+      localStorage.setItem('user', JSON.stringify(user))
+      onLogin();
+      navigate("/");
+    }
+  },[data])
   const onFinish = async (values) => {
     try {
       //const response = await axios.post("/api/user/login", values);
       loginMutation({variables: values});
-      onLogin();
-      navigate("/");
-     dispatch({type: 'SET_USER', action:null})
+    
     } catch (error) {
       console.error(error.response);
     }

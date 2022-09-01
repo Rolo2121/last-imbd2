@@ -41,7 +41,7 @@ query GetComments($postId: String!) {
     id
     content
     date
-    writer
+    writer{username}
   }
 }
 
