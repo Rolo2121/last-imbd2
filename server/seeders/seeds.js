@@ -1,9 +1,8 @@
-const bcrypt = require('bcrypt');
-const {faker} = require('@faker-js/faker');
-const db = require('../config/connection');
-const { Movie, User } = require('../models');
-console.log(faker)
-db.once('open', async () => {
+const bcrypt = require("bcrypt");
+const { faker } = require("@faker-js/faker");
+const db = require("../config/connection");
+const { Movie, User } = require("../models");
+db.once("open", async () => {
   await Movie.deleteMany({});
   await User.deleteMany({});
 
@@ -11,7 +10,7 @@ db.once('open', async () => {
   for (let i = 1; i < 51; i++) {
     const username = `user${i}`;
     const email = `${username}@gmail.com`;
-    const password = await bcrypt.hash("password", 10)
+    const password = await bcrypt.hash("password", 10);
     userData.push({ username, email, password });
   }
   const createdUsers = await User.collection.insertMany(userData);
@@ -19,7 +18,7 @@ db.once('open', async () => {
   const movieData = [];
   for (let i = 0; i < 50; i += 1) {
     const externalMovieId = faker.random.numeric();
-    const rating = faker.random.numeric({ 'min': 0, 'max': 10 });
+    const rating = faker.random.numeric({ min: 0, max: 10 });
     const voteCount = faker.random.numeric();
     const title = faker.commerce.productName();
     const overview = faker.lorem.words(Math.round(Math.random() * 20) + 1);
@@ -28,7 +27,6 @@ db.once('open', async () => {
     const trailer = faker.image.imageUrl();
     movieData.push({ externalMovieId, rating, voteCount, title, overview, releaseDate, poster, trailer });
   }
-  console.log(movieData)
   const createdMovies = await Movie.collection.insertMany(movieData);
 
   for (let i = 0; i < 100; i += 1) {
@@ -45,7 +43,7 @@ db.once('open', async () => {
     const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
     const { _id: userId } = createdUsers.ops[randomUserIndex];
     let movieId;
-    for (let i =0; i < (Math.floor(Math.random() * 10)); i += 1) {
+    for (let i = 0; i < Math.floor(Math.random() * 10); i += 1) {
       const randomMovieIndex = Math.floor(Math.random() * createdMovies.ops.length);
       movieId = createdMovies.ops[randomMovieIndex];
     }
@@ -57,7 +55,7 @@ db.once('open', async () => {
     const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
     const { _id: userId } = createdUsers.ops[randomUserIndex];
     let movieId;
-    for (let i =0; i < (Math.floor(Math.random() * 10)); i += 1) {
+    for (let i = 0; i < Math.floor(Math.random() * 10); i += 1) {
       const randomMovieIndex = Math.floor(Math.random() * createdMovies.ops.length);
       movieId = createdMovies.ops[randomMovieIndex];
     }
@@ -65,6 +63,6 @@ db.once('open', async () => {
     await Movie.updateOne({ _id: movieId }, { $addToSet: { dislikedUsers: userId } });
   }
 
-  console.log('all done!');
+  console.log("all done!");
   process.exit(0);
 });
