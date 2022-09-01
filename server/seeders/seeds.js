@@ -37,7 +37,6 @@ db.once("open", async () => {
       const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
       friendId = createdUsers.ops[randomUserIndex];
     }
-    await User.updateOne({ _id: userId }, { $addToSet: { friends: friendId } });
   }
   for (let i = 0; i < 100; i += 1) {
     const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
@@ -47,8 +46,6 @@ db.once("open", async () => {
       const randomMovieIndex = Math.floor(Math.random() * createdMovies.ops.length);
       movieId = createdMovies.ops[randomMovieIndex];
     }
-    await User.updateOne({ _id: userId }, { $addToSet: { likedMovies: movieId } });
-    await Movie.updateOne({ _id: movieId }, { $addToSet: { likedUsers: userId } });
   }
 
   for (let i = 0; i < 100; i += 1) {
@@ -59,8 +56,6 @@ db.once("open", async () => {
       const randomMovieIndex = Math.floor(Math.random() * createdMovies.ops.length);
       movieId = createdMovies.ops[randomMovieIndex];
     }
-    await User.updateOne({ _id: userId }, { $addToSet: { dislikedMovies: movieId } });
-    await Movie.updateOne({ _id: movieId }, { $addToSet: { dislikedUsers: userId } });
   }
 
   console.log("all done!");
