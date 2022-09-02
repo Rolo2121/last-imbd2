@@ -3,6 +3,7 @@ import { HeartOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useMutation } from '@apollo/client';
 import { UPDATE_WATCHLIST, DELETE_WATCHLIST } from './utils/mutations';
 import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
 export default function MovieCard({ movie, type, onRemove }) {
 	console.log(movie)

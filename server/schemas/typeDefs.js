@@ -9,6 +9,12 @@ const typeDefs = gql`
     releaseDate: String
     poster: String
   }
+  type User {
+    id: String
+    username: String
+    email: String
+    name: String
+  }
   type Comment {
     id: String
     writer: User
@@ -16,10 +22,7 @@ const typeDefs = gql`
     postId: Movie
     date: String
   }
-  type User {
-    id: String
-    username: String
-  }
+  
   type UserResponse {
     token: String
     user: User

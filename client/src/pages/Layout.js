@@ -73,7 +73,7 @@ const AppLayout = ({ setMovie, movies, onAdd }) => {
           </Form>
 
           <Row gutter={[16, 16]}>
-            {data?.movies?.map((movie) => (
+            {(data&&data.movies?data.movies: []).map((movie) => (
               <Col xs={24} sm={12} md={8} lg={6} xlg={4}>
                 <MovieCard movie={movie} onAdd={onAdd} />
               </Col>

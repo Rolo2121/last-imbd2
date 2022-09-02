@@ -5,9 +5,13 @@ import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined, DeleteOutline
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { GET_COMMENTS, } from '../utils/queries';
 import { COMMENT_MUTATION,  COMMENT_DELETE_MUTATION } from '../utils/mutations';
-
-
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import { useParams } from 'react-router-dom';
+dayjs.extend(relativeTime)
+
+
+
 const { TextArea } = Input;
 
 const CommentList = ({ loading }) => {
@@ -16,12 +20,16 @@ const CommentList = ({ loading }) => {
   const [action, setAction] = useState(null);
   const [GetComments, {data, refetch, called}] = useLazyQuery(GET_COMMENTS)
   const [deleteComment, {data: deleteData, loading: deleteLoading}] = useMutation(COMMENT_DELETE_MUTATION)
-  const comments = data?.comments || []
+  const comments = (data&&data.comments?data.comments: []) || []
   const {id } = useParams()
   useEffect(() => {
+
     if (!loading &&!called){
     GetComments({variables: {postId: id, writer: JSON.parse(localStorage.getItem('user')).id }})}else if(!deleteLoading) {
-      refetch()
+      setTimeout(() => {
+        refetch()
+      },1000)
+
     }
   }, [loading, called, deleteLoading])
   const like = () => {
@@ -44,22 +52,12 @@ const CommentList = ({ loading }) => {
     itemLayout="horizontal"
     renderItem={(props) =>   {
 
-
+      console.log(props)
     return <Comment
 
       actions={[
 
-        <span onClick={like}>
-          {React.createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
-          <span className="comment-action">{likes}</span>
-        </span>
-      ,
-    
-        <span onClick={dislike}>
-          {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined)}
-          <span 
-          className="comment-action">
-          {dislikes}</span> </span>,
+       
           <span>
             <span 
             onClick={() => {
@@ -70,8 +68,9 @@ const CommentList = ({ loading }) => {
     
     ]}
 
-      datetime={ <span>{moment(props.date).fromNow()}</span>}
-       author={<span>{props.writer.username}</span>}
+      datetime={ <span>{dayjs().to(dayjs(new Date( parseInt(props.date))))}</span>}
+      
+       author={<span>{props.writer.email}</span>}
         avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Jazelle Pearce" />}
         content={
           <p>

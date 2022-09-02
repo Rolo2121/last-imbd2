@@ -2,57 +2,34 @@ import './App.css';
 import Layout from './pages/Layout';
 import CreateAccount from './pages/CreateAccount';
 import Login from './pages/Login';
-import Watchlist from './pages/WatchList';
-import { Routes, Route, BrowserRouter, Switch } from 'react-router-dom';
-import axios from 'axios';
+import { Routes, Route, BrowserRouter} from 'react-router-dom';
+
+import React from 'react';
 
 import Movie from './pages/Movie';
-import { useEffect, useState } from 'react';
-import { useQuery, gql, useMutation } from '@apollo/client';
-//import { ADD_TO_WATCHLIST } from './utils/actions';
-import { GET_WATCHLIST } from './utils/queries';
-import { UPDATE_WATCHLIST } from './utils/mutations';
+import {useState } from 'react';
+import { useQuery, useMutation } from '@apollo/client';
+
+
 import { GET_MOVIES } from './utils/queries';
 
 // import { ifError } from 'assert';
 function App() {
-	const [loggedIn, setLoggedIn] = useState(false);
+	const [setLoggedIn] = useState(false);
 	const { data: movies } = useQuery(GET_MOVIES);
-	const { data: watchlist } = useQuery(GET_WATCHLIST);
-	const [mutateFunction, { data: updatedWatchlist }] =
-		useMutation(UPDATE_WATCHLIST);
-	const [movie, setMovie] = useState(null);
-	const [Watchlist, setWatchlist] = useState([]);
+
+
+	const [ setMovie] = useState(null);
+
 
 	function login() {
 		setLoggedIn(true);
 	}
-	function logout() {
-		setLoggedIn(false);
-	}
+	
+	
 
-	function removeFromWatchlist(id) {
-		//setWatchlist(watchlist.filter((entry) => entry._id !== id));
-	}
-	function addToWatchlist(id) {
-		const foundMovie = movies.find((movie) => movie._id === id);
-		if (foundMovie) {
-			//setWatchlist([...watchlist, foundMovie]);
-			mutateFunction({ variables: { movieId: foundMovie._id } });
-		}
-	}
 
-	/*useEffect(() => {
-		async function checkLoggedIn() {
-			try {
-				const axios = await axios.get('/api/user/ping');
-				login();
-			} catch (error) {}
-		}
-		checkLoggedIn();
-	}, []);*/
 
-	//
 
 	return (
 		<>
@@ -72,20 +49,12 @@ function App() {
 										setMovie(movie);
 									}}
 									movies={movies}
-									onAdd={addToWatchlist}
+						
 								/>
 							}
 						/>
 						<Route path="/movie/:id" element={<Movie  />} />
-						<Route
-							path="/watchlist"
-							element={
-								<Watchlist
-									watchlist={watchlist}
-									onRemove={removeFromWatchlist}
-								/>
-							}
-						/>
+
 					</Routes>
 				</div>
 			</BrowserRouter>

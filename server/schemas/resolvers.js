@@ -27,7 +27,9 @@ const resolvers = {
     },
 
     comments: async (parent, { postId }) => {
-      return Comment.find({ postId }).select("-__v").populate("writer");
+      const response= await Comment.find({ postId }).populate("writer");
+      console.log(response)
+        return response
     },
 
     movies: async (parent, { title }) => {

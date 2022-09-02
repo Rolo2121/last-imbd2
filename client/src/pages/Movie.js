@@ -18,7 +18,7 @@ const Movie = ({ }) => {
   useEffect(() => {
     getmovie({variables: { id }})
   },[])
-  const movie = data?.movie || {}
+  const movie = data?(data.movie || {}): {}
 
   const tags = [1, 2, 3];
   return (
@@ -31,16 +31,10 @@ const Movie = ({ }) => {
           </Col>
 
           <Col xs={24} sm={12}>
-            <h2>{movie.releaseDate?.split("-")[0]}</h2>
+            <h2>{(movie.releaseDate||'').split("-")[0]}</h2>
             <h1>{movie.title}</h1>
-            {tags.map((tag) => (
-              <Tag>{tag}</Tag>
-            ))}
-            <div style={{ display: "flex" }}>
-              <Button type="primary">rating</Button>
-              <Button>Watchlist</Button>
-              <Button>Trailer</Button>
-            </div>
+
+
             <div>
               <p>
                 <span style={{ fontWeight: "bold" }}>Rating:</span> {movie.rating}{" "}
