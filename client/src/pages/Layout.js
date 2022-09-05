@@ -7,16 +7,23 @@ import { PageHeader, Breadcrumb, Layout, Menu, Col, Row, TimePicker, Form, Input
 import { UserOutlined } from "@ant-design/icons";
 
 import MovieCard from "../MovieCard";
-import { getMoviesByName } from "../api/theMovieDB";
+import { GET_MOVIES } from "../utils/queries";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@apollo/client";
 
 const { Header, Content, Footer } = Layout;
 
-const AppLayout = ({ setMovie, setMovies, movies, onAdd }) => {
+const AppLayout = ({ setMovie, movies, onAdd }) => {
+  const { data, refetch } = useQuery(GET_MOVIES);
+  //const [movies, setMovies] = useState([])
   const navigate = useNavigate();
   const onFinish = async (values) => {
-    const movies = await getMoviesByName(values.movieName);
-    setMovies(movies);
+    //const movie = await getMovieByName(values.movieName);
+    console.log(values);
+    const movies = await refetch(values);
+    console.log({ movies });
+    //setMovies(movies);
+    //navigate(`/movie`);
   };
   const onFinishFailed = (errorInfo) => {
     console.log(errorInfo);
@@ -42,7 +49,7 @@ const AppLayout = ({ setMovie, setMovies, movies, onAdd }) => {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
-            <Form.Item label="Enter Movie Name:" name="movieName">
+            <Form.Item label="Enter Movie Name:" name="title">
               <Input placeholder="Find a Movie" />
             </Form.Item>
             <Form.Item>
@@ -53,7 +60,7 @@ const AppLayout = ({ setMovie, setMovies, movies, onAdd }) => {
           </Form>
 
           <Row gutter={[16, 16]}>
-            {movies.map((movie) => (
+            {(data && data.movies ? data.movies : []).map((movie) => (
               <Col xs={24} sm={12} md={8} lg={6} xlg={4}>
                 <MovieCard movie={movie} onAdd={onAdd} />
               </Col>

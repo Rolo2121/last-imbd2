@@ -1,43 +1,46 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+const { Schema, model } = require("mongoose");
+const bcrypt = require("bcrypt");
+const Movie = require("./Movie");
 
-const Schema = mongoose.Schema;
-let userSchema = new Schema(
+const userSchema = new Schema(
   {
-    name: {
-      type: String,
+    username: {
+      type: Schema.Types.String,
       required: true,
+      unique: true,
     },
     email: {
-      type: String,
+      type: Schema.Types.String,
       required: true,
+      unique: true,
+      match: [/.+@.+\..+/, "Must use a valid email address"],
     },
     password: {
-      type: String,
+      type: Schema.Types.String,
       required: true,
     },
     watchlist: [
       {
-        type: mongoose.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Movie",
       },
     ],
   },
-  {
-    timestamps: true,
-    collection: "users",
-  }
+  { timestamps: true, collection: "users" }
 );
-userSchema.pre("save", function (next) {
-  if (!this.isModified("password")) {
-    return next();
+
+userSchema.pre("save", async function (next) {
+  if (this.isNew || this.isModified("password")) {
+    const saltRounds = 10;
+    this.password = await bcrypt.hash(this.password, saltRounds);
   }
-  console.log(this.password);
-  this.password = bcrypt.hashSync(this.password, 10);
+
   next();
 });
-userSchema.methods.comparePassword = function (plaintext, callback) {
-  console.log(this.password, 333);
-  return callback(null, bcrypt.compareSync(plaintext, this.password));
+
+userSchema.methods.isCorrectPassword = async function (password) {
+  return bcrypt.compare(password, this.password);
 };
-module.exports = mongoose.model("User", userSchema);
+const User = model("User", userSchema);
+
+module.exports = User;

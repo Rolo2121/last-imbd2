@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { useLazyQuery } from "@apollo/client";
 import "antd/dist/antd.css";
 import "../index.css";
 import "./CreateAccount.js";
@@ -8,22 +8,18 @@ import Comments from "./Comments";
 import { PageHeader, Breadcrumb, Layout, Menu, Col, Row, TimePicker, Form, Input, Button, Space, Card, Image, Tag } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
+import { GET_MOVIE } from "../utils/queries";
 
 const { Header, Content, Footer } = Layout;
 
 const Movie = ({}) => {
-  const tags = [1, 2, 3];
-  const [movie, setMovie] = useState({});
+  const [getmovie, { data }] = useLazyQuery(GET_MOVIE);
   const { id } = useParams();
   useEffect(() => {
-    const getMovies = async () => {
-      const response = await fetch("/api/movie/tmdb/" + id);
-      console.log(response);
-      const data = await response.json();
-      setMovie(data);
-    };
-    getMovies();
+    getmovie({ variables: { id } });
   }, []);
+  const movie = data ? data.movie || {} : {};
+
   return (
     <>
       <Nav />
@@ -34,17 +30,9 @@ const Movie = ({}) => {
           </Col>
 
           <Col xs={24} sm={12}>
-            <h1>
-              {movie.title} {movie && movie.createdAt && `(${movie.createdAt.split("-")[0]})`}
-            </h1>
-            {tags?.map((tag) => (
-              <Tag>{tag}</Tag>
-            ))}
-            <div style={{ display: "flex" }}>
-              <Button type="primary">rating</Button>
-              <Button>Watchlist</Button>
-              <Button>Trailer</Button>
-            </div>
+            <h2>{(movie.releaseDate || "").split("-")[0]}</h2>
+            <h1>{movie.title}</h1>
+
             <div>
               <p>
                 <span style={{ fontWeight: "bold" }}>Rating:</span> {movie.rating}{" "}
@@ -57,7 +45,7 @@ const Movie = ({}) => {
               </p>
 
               <h2>Overview</h2>
-              <p>{movie?.overview}</p>
+              <p>{movie.overview}</p>
             </div>
           </Col>
         </Row>

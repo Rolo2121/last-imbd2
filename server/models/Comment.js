@@ -8,6 +8,7 @@ const commentSchema = mongoose.Schema({
     },
     postId: {
         type: String,
+        ref: 'Movie'
     },
     responseTo: {
         type: Schema.Types.ObjectId,
@@ -19,8 +20,8 @@ const commentSchema = mongoose.Schema({
     date: { type: Date,
     default: Date.now
     }
-}, { timestamps: true })
+}, { timestamps: true, collection: 'comment' })
 
 const Comment = mongoose.model('Comment', commentSchema);
 
-module.exports = { Comment }
+module.exports =  Comment 

@@ -32,9 +32,7 @@ return(
       <Button onClick={() => {
         navigate("/")
       }}>Home</Button>
-      <Button onClick={() => {
-        navigate("/watchlist")
-      }}>Watchlist</Button>
+
   
       <Menu mode="horizontal" theme="dark" defaultSelectedKeys={['UserOutlined']} style= {{float: 'right'}}>
 
