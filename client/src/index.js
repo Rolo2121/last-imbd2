@@ -4,9 +4,9 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ApolloClient, InMemoryCache, ApolloProvider, gql } from "@apollo/client";
-
+console.log(process.env.REACT_APP_API_URL);
 const client = new ApolloClient({
-  uri: process.env.REACT_APP_API_URL || "http://localhost:3001/graphql",
+  uri: process.env.REACT_APP_API_URL || "/graphql",
   cache: new InMemoryCache(),
 });
 const root = ReactDOM.createRoot(document.getElementById("root"));

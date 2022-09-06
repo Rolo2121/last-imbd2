@@ -30,7 +30,7 @@
 		"web-vitals": "^3.0.0"
 	},
 	"scripts": {
-		"start": "SKIP_PREFLIGHT_CHECK=true react-scripts start",
+		"start": "react-scripts start",
 		"build": "SKIP_PREFLIGHT_CHECK=true react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject"
